@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minimal Calculator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .calculator {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 16px;
+      width: 320px;
+      padding: 20px;
+      box-shadow: none;
+      position: relative;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .display {
+      width: 100%;
+      font-size: 28px;
+      padding: 12px;
+      text-align: right;
+      border: none;
+      border-bottom: 1px solid #d1d5db;
+      margin-bottom: 16px;
+      background: transparent;
+      color: #111827;
+      outline: none;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .btn {
+      font-size: 18px;
+      padding: 14px 0;
+      background: none;
+      border: 1px solid #111827;
+      color: #111827;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #f3f4f6;
+    }
+
+    /* Dark Theme */
+    body.dark {
+      background: #111111;
+      color: #ffffff;
+    }
+
+    body.dark .calculator {
+      background: #1a1a1a;
+      border-color: #333333;
+    }
+
+    body.dark .display {
+      color: #ffffff;
+      border-color: #444444;
+    }
+
+    body.dark .btn {
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+
+    body.dark .btn:hover {
+      background: #2a2a2a;
+    }
+
+    body.dark .theme-toggle {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator">
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
+  <input type="text" id="display" class="display" disabled />
+
+  <div class="buttons">
+    <button class="btn" onclick="append('7')">7</button>
+    <button class="btn" onclick="append('8')">8</button>
+    <button class="btn" onclick="append('9')">9</button>
+    <button class="btn" onclick="append('/')">÷</button>
+
+    <button class="btn" onclick="append('4')">4</button>
+    <button class="btn" onclick="append('5')">5</button>
+    <button class="btn" onclick="append('6')">6</button>
+    <button class="btn" onclick="append('*')">×</button>
+
+    <button class="btn" onclick="append('1')">1</button>
+    <button class="btn" onclick="append('2')">2</button>
+    <button class="btn" onclick="append('3')">3</button>
+    <button class="btn" onclick="append('-')">−</button>
+
+    <button class="btn" onclick="append('0')">0</button>
+    <button class="btn" onclick="append('.')">.</button>
+    <button class="btn" onclick="calculate()">=</button>
+    <button class="btn" onclick="append('+')">+</button>
+
+    <button class="btn" style="grid-column: span 2;" onclick="clearDisplay()">C</button>
+    <button class="btn" style="grid-column: span 2;" onclick="backspace()">⌫</button>
+  </div>
+</div>
+
+<script>
+  const display = document.getElementById('display');
+
+  function append(value) {
+    display.value += value;
+  }
+
+  function clearDisplay() {
+    display.value = '';
+  }
+
+  function backspace() {
+    display.value = display.value.slice(0, -1);
+  }
+
+  function calculate() {
+    try {
+      display.value = eval(display.value);
+    } catch {
+      display.value = 'Error';
+    }
+  }
+
+  // Theme toggle logic
+  const themeToggle = document.getElementById('themeToggle');
+  const storedTheme = localStorage.getItem('theme');
+
+  if (storedTheme === 'dark') {
+    document.body.classList.add('dark');
+    themeToggle.textContent = '☀';
+  }
+
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    themeToggle.textContent = isDark ? '☀' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>
